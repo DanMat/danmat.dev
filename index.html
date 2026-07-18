@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>DANMAT.DEV — Loading…</title>
+<meta name="description" content="Dan Matthew — portfolio coming soon. A work-in-progress arcade screen." />
+<meta name="theme-color" content="#05010f" />
+<meta property="og:title" content="DANMAT.DEV" />
+<meta property="og:description" content="Portfolio loading… insert coin. (Work in progress.)" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #05010f;
+    --cyan: #00e5ff;
+    --pink: #ff2e97;
+    --purple: #b14bff;
+    --ink: #d7f9ff;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--bg); }
+  body {
+    font-family: 'Press Start 2P', ui-monospace, 'Courier New', monospace;
+    color: var(--ink);
+    -webkit-font-smoothing: none;
+    touch-action: none;
+    user-select: none;
+  }
+  #scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
+
+  /* CRT scanlines + vignette overlay */
+  .crt {
+    position: fixed; inset: 0; pointer-events: none; z-index: 5;
+    background:
+      repeating-linear-gradient(to bottom, rgba(0,0,0,0) 0 2px, rgba(0,0,0,.22) 2px 4px),
+      radial-gradient(120% 120% at 50% 45%, rgba(0,0,0,0) 55%, rgba(0,0,0,.65) 100%);
+    mix-blend-mode: multiply;
+    animation: flicker 5.5s infinite steps(60);
+  }
+  @keyframes flicker { 0%,96%,100% { opacity: 1; } 97% { opacity: .82; } 98% { opacity: .95; } }
+
+  .stage {
+    position: fixed; inset: 0; z-index: 4;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 24px; gap: 22px;
+  }
+  .kicker { font-size: 10px; letter-spacing: 3px; color: var(--purple);
+    text-shadow: 0 0 8px var(--purple); }
+  .logo {
+    font-size: clamp(26px, 8vw, 68px); line-height: 1.1; margin: 0; letter-spacing: 2px;
+    color: #fff;
+    text-shadow: 0 0 6px var(--cyan), 0 0 22px var(--cyan), 4px 4px 0 var(--pink);
+    animation: hue 8s linear infinite;
+  }
+  @keyframes hue { 0%,100% { filter: none; } 50% { filter: hue-rotate(18deg); } }
+  .sub { font-size: clamp(9px, 2.6vw, 14px); letter-spacing: 2px; color: var(--cyan);
+    text-shadow: 0 0 10px var(--cyan); }
+  .sub b { color: var(--pink); text-shadow: 0 0 10px var(--pink); }
+
+  .start { font-size: clamp(9px, 2.4vw, 13px); color: #fff; text-shadow: 0 0 8px #fff;
+    animation: blink 1.05s steps(2, start) infinite; }
+  .start.hidden { display: none; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .hint { font-size: 8px; color: #6a5a99; letter-spacing: 2px; }
+
+  nav { display: flex; flex-wrap: wrap; gap: 10px 20px; justify-content: center; }
+  nav a {
+    font-size: clamp(8px, 2.2vw, 11px); color: var(--cyan); text-decoration: none;
+    letter-spacing: 1px; padding: 8px 12px; border: 2px solid rgba(0,229,255,.35);
+    border-radius: 4px; background: rgba(0,229,255,.05); transition: .12s;
+  }
+  nav a::before { content: '▸ '; color: var(--pink); }
+  nav a:hover, nav a:focus-visible {
+    color: #fff; border-color: var(--pink); background: rgba(255,46,151,.14);
+    text-shadow: 0 0 8px #fff; outline: none; transform: translateY(-2px);
+  }
+
+  /* corner HUD */
+  .hud { position: fixed; z-index: 6; font-size: 8px; letter-spacing: 2px; color: var(--cyan);
+    text-shadow: 0 0 6px var(--cyan); pointer-events: none; }
+  .hud.tl { top: 14px; left: 16px; }
+  .hud.tr { top: 14px; right: 16px; text-align: right; color: var(--pink); text-shadow: 0 0 6px var(--pink); }
+  .hud.br { bottom: 14px; right: 16px; text-align: right; color: #6a5a99; text-shadow: none; }
+  .hud i { color: #fff; font-style: normal; }
+
+  @media (max-width: 520px) { .hud.tr, .hud.tl { font-size: 7px; } .stage { gap: 16px; } }
+  @media (prefers-reduced-motion: reduce) {
+    .crt, .logo, .start { animation: none; }
+  }
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="crt"></div>
+
+<div class="hud tl">◈ DANMAT<br />SYS.v0.1</div>
+<div class="hud tr">SCORE <i>000000</i><br />COIN <i>0</i></div>
+<div class="hud br">© <span id="yr"></span> · BUILDING…</div>
+
+<main class="stage">
+  <div class="kicker">◄ ◆ ► INSERT COIN ◄ ◆ ►</div>
+  <h1 class="logo">DANMAT<span style="color:var(--pink)">.</span>DEV</h1>
+  <div class="sub">PORTFOLIO — <b>WORK IN PROGRESS</b></div>
+  <div id="start" class="start">▶ PRESS START ◀</div>
+  <div id="hint" class="hint">[ SPACE / TAP ] TO FLY · [ ARROWS / WASD / DRAG ] TO MOVE</div>
+  <nav>
+    <a href="https://github.com/DanMat">GITHUB</a>
+    <a href="https://www.npmjs.com/package/create-packkit">PACKKIT</a>
+    <a href="mailto:dannymatthew@gmail.com">CONTACT</a>
+  </nav>
+</main>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+  const cv = document.getElementById('scene');
+  const ctx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let W, H, DPR;
+  function resize() {
+    DPR = Math.min(devicePixelRatio || 1, 2);
+    W = cv.width = Math.floor(innerWidth * DPR);
+    H = cv.height = Math.floor(innerHeight * DPR);
+    cv.style.width = innerWidth + 'px';
+    cv.style.height = innerHeight + 'px';
+  }
+  resize();
+  addEventListener('resize', resize);
+
+  // --- starfield ---
+  const stars = Array.from({ length: 120 }, () => ({
+    x: Math.random(), y: Math.random(), z: Math.random() * 0.8 + 0.2,
+  }));
+
+  // --- controllable ship ---
+  const ship = { x: 0.5, y: 0.42, vx: 0, vy: 0, a: -Math.PI / 2, started: false };
+  const keys = new Set();
+  let touchTarget = null;
+
+  function start() {
+    if (ship.started) return;
+    ship.started = true;
+    document.getElementById('start').classList.add('hidden');
+  }
+  addEventListener('keydown', (e) => {
+    const k = e.key.toLowerCase();
+    if (k === ' ' || k === 'enter') { start(); e.preventDefault(); }
+    keys.add(k);
+  });
+  addEventListener('keyup', (e) => keys.delete(e.key.toLowerCase()));
+  addEventListener('pointerdown', (e) => {
+    start();
+    touchTarget = { x: e.clientX / innerWidth, y: e.clientY / innerHeight };
+  });
+  addEventListener('pointermove', (e) => {
+    if (touchTarget) touchTarget = { x: e.clientX / innerWidth, y: e.clientY / innerHeight };
+  });
+  addEventListener('pointerup', () => (touchTarget = null));
+
+  function updateShip(dt) {
+    const acc = 0.9;
+    let ax = 0, ay = 0;
+    if (keys.has('arrowleft') || keys.has('a')) ax -= acc;
+    if (keys.has('arrowright') || keys.has('d')) ax += acc;
+    if (keys.has('arrowup') || keys.has('w')) ay -= acc;
+    if (keys.has('arrowdown') || keys.has('s')) ay += acc;
+    if (touchTarget) { ax += (touchTarget.x - ship.x) * 6; ay += (touchTarget.y - ship.y) * 6; }
+    ship.vx = (ship.vx + ax * dt) * 0.9;
+    ship.vy = (ship.vy + ay * dt) * 0.9;
+    ship.x = Math.max(0.04, Math.min(0.96, ship.x + ship.vx * dt));
+    ship.y = Math.max(0.08, Math.min(0.92, ship.y + ship.vy * dt));
+    if (Math.abs(ship.vx) + Math.abs(ship.vy) > 0.002) ship.a = Math.atan2(ship.vy, ship.vx);
+  }
+
+  function drawShip() {
+    const x = ship.x * W, y = ship.y * H, s = 13 * DPR;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(ship.a + Math.PI / 2);
+    // thruster flame
+    ctx.fillStyle = 'rgba(255,46,151,.9)';
+    const flame = (Math.abs(ship.vx) + Math.abs(ship.vy)) * 400 + Math.random() * 4;
+    ctx.beginPath();
+    ctx.moveTo(-s * 0.4, s * 0.6); ctx.lineTo(0, s * 0.6 + Math.min(flame, 18) * DPR); ctx.lineTo(s * 0.4, s * 0.6);
+    ctx.fill();
+    // body
+    ctx.shadowColor = '#00e5ff'; ctx.shadowBlur = 16 * DPR;
+    ctx.fillStyle = '#00e5ff';
+    ctx.beginPath();
+    ctx.moveTo(0, -s); ctx.lineTo(s * 0.8, s * 0.7); ctx.lineTo(0, s * 0.35); ctx.lineTo(-s * 0.8, s * 0.7);
+    ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(-s * 0.12, -s * 0.35, s * 0.24, s * 0.5);
+    ctx.restore();
+  }
+
+  let t = 0, last = performance.now();
+  function frame(now) {
+    const dt = Math.min((now - last) / 1000, 0.05); last = now; t += dt;
+    ctx.clearRect(0, 0, W, H);
+
+    const horizon = H * 0.62;
+
+    // --- synthwave grid floor (Retroix grid nod) ---
+    ctx.lineWidth = 1 * DPR;
+    const scroll = reduce ? 0 : (t * 0.35) % 1;
+    // horizontal receding lines
+    for (let i = 0; i < 16; i++) {
+      const p = (i + scroll) / 16;
+      const yy = horizon + (H - horizon) * (p * p);
+      const alpha = 0.10 + 0.5 * p;
+      ctx.strokeStyle = 'rgba(177,75,255,' + alpha + ')';
+      ctx.beginPath(); ctx.moveTo(0, yy); ctx.lineTo(W, yy); ctx.stroke();
+    }
+    // vertical converging lines
+    const vlines = 22, cx = W / 2;
+    for (let i = -vlines; i <= vlines; i++) {
+      const fx = cx + (i / vlines) * W * 1.8;
+      ctx.strokeStyle = 'rgba(0,229,255,0.18)';
+      ctx.beginPath(); ctx.moveTo(cx + (fx - cx) * 0.02, horizon); ctx.lineTo(fx, H); ctx.stroke();
+    }
+    // horizon glow
+    const g = ctx.createLinearGradient(0, horizon - 40 * DPR, 0, horizon + 4 * DPR);
+    g.addColorStop(0, 'rgba(255,46,151,0)'); g.addColorStop(1, 'rgba(255,46,151,.55)');
+    ctx.fillStyle = g; ctx.fillRect(0, horizon - 40 * DPR, W, 44 * DPR);
+
+    // --- stars (above horizon) ---
+    for (const st of stars) {
+      if (!reduce) { st.x -= 0.004 * st.z * dt * 60 / 60; if (st.x < 0) st.x += 1; }
+      const sx = st.x * W, sy = st.y * horizon;
+      const r = st.z * 1.6 * DPR;
+      ctx.globalAlpha = 0.35 + st.z * 0.6;
+      ctx.fillStyle = st.z > 0.7 ? '#00e5ff' : '#b14bff';
+      ctx.fillRect(sx, sy, r, r);
+    }
+    ctx.globalAlpha = 1;
+
+    if (ship.started && !reduce) { updateShip(dt); drawShip(); }
+    else if (ship.started) drawShip();
+
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+</script>
+</body>
+</html>
