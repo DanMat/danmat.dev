@@ -4,6 +4,13 @@ Personal site for **Dan Matthew** — served via GitHub Pages at [www.danmat.dev
 
 Currently a **work-in-progress** arcade landing screen (self-contained `index.html`, no build step). The full portfolio is coming.
 
+## Vision & roadmap
+
+- [`docs/VISION.md`](docs/VISION.md) — positioning, the through-line, and the plan.
+- [`docs/fable-design-brief.md`](docs/fable-design-brief.md) — WIP design brief for the identity pass.
+
+The full site will be content-managed by [Nimbus CMS](https://nimbuscms.dev) once it ships.
+
 ## Hosting
 
 - GitHub Pages, source = `main` branch, root.

@@ -1,0 +1,6 @@
+# Personal, private working notes — never committed / never public.
+/private/
+
+# misc
+.DS_Store
+node_modules/
