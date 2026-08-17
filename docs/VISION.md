@@ -40,7 +40,18 @@ I've *always* built dev tools and platform enablement:
 - **packkit** — provider-neutral project scaffolding (CLI + MCP + web configurator).
 - **@danmat** — npm libraries.
 - **Nimbus CMS** — a headless CMS (my own product).
+- **PhilatelyOS** — an event-driven platform using AI vision (detection, OCR, embeddings,
+  VLMs) to digitalize my **100k+ stamp collection**. A hobby, engineered like a real
+  system (contracts-first, ADRs, IaC).
 - …with the **Dealer.com** body of work as the pre-AI foundation.
+
+## Not just an engineer — a whole person
+
+The projects double as a portrait of what I actually love: **games** (Retroix), **travel**
+(waypoints / droppin), **audiobooks** (earshot), **stamp collecting** (PhilatelyOS). The
+throughline isn't the topics — it's that when I'm into something, I build the app for it.
+The portfolio should feel like *a person with obsessions who ships*, not a list of
+deliverables.
 
 ## The flex: the site runs on my own CMS
 

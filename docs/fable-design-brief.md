@@ -23,6 +23,9 @@ systems. The site is his business card for **this** moment.
   that reads as *considered*, not a template.
 - Confident and current — comfortable in the AI era **without** the "AI-generated purple
   gradient" cliché.
+- **A whole person, not a résumé.** The work spans real obsessions — games, travel,
+  audiobooks, a 100k-stamp collection — because he builds an app for whatever he's into.
+  The design should let personality and passions show through, not read as a corporate deck.
 
 ## Concrete asks
 
@@ -52,5 +55,6 @@ systems. The site is his business card for **this** moment.
 ## Projects to weave in (all live)
 
 Retroix (engine + 7 games + leaderboard dashboard) · droppin / waypoints (Timeline → map) ·
-earshot (audiobook year) · packkit (scaffolder) · @danmat (npm libs) · Nimbus CMS · plus the
-Dealer.com pre-AI foundation.
+earshot (audiobook year) · PhilatelyOS (AI-vision cataloging of a 100k-stamp collection) ·
+packkit (scaffolder) · @danmat (npm libs) · Nimbus CMS · plus the Dealer.com pre-AI
+foundation.
